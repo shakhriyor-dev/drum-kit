@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+  background: #0f172a; /* To'q ko'k/qora fon */
+  background-image: 
+    radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* uiverse.io uslubidagi karta */
+.key {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Tugma ustiga kelganda */
+.key:hover {
+  background: rgba(51, 65, 85, 0.9);
+  transform: translateY(-5px);
+  border-color: #00d2ff;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+}
+
+/* Tugma bosilganda (JS orqali .playing qo'shiladi) */
+.key.playing {
+  transform: scale(0.9) translateY(2px);
+  border-color: #00d2ff;
+  background: #00d2ff;
+  box-shadow: 0 0 40px #00d2ff, 
+              0 0 80px rgba(0, 210, 255, 0.6);
+}
+
+/* Harf uslubi */
+kbd {
+  display: block;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+  transition: all 0.1s;
+}
+
+.playing kbd {
+  color: #0f172a;
+  transform: scale(1.2);
+}
+
+/* Ovoz nomi */
+.sound {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #38bdf8;
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+.playing .sound {
+  color: #0f172a;
+}
+
+/* Tugma ichidagi nur effekti (Glow) */
+.key::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+}
