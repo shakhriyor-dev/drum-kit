@@ -1,12 +1,9 @@
 const canvas = document.getElementById('visualizer');
 const ctx = canvas.getContext('2d');
 
-let audioCtx;
-let analyser;
-let dataArray;
-let bufferLength;
+let audioCtx, analyser, dataArray, bufferLength;
 
-// Canvasni ekran o'lchamiga moslash
+// Canvas o'lchamini sozlash
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -14,49 +11,36 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Audio tizimini ishga tushirish (faqat birinchi marta bosilganda)
 function initAudio() {
     if (audioCtx) return;
-
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 128; // To'lqinlar soni
-
+    analyser.fftSize = 256;
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
     const audios = document.querySelectorAll('audio');
     audios.forEach(audio => {
-        // Cross-origin audio bilan ishlash uchun
-        audio.crossOrigin = "anonymous";
         const source = audioCtx.createMediaElementSource(audio);
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
     });
-
     draw();
 }
 
-// Ekvalayzerni chizish
 function draw() {
     requestAnimationFrame(draw);
     analyser.getByteFrequencyData(dataArray);
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const barWidth = (canvas.width / bufferLength) * 2;
+    const barWidth = (canvas.width / bufferLength) * 2.5;
     let x = 0;
 
     for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i] * 2;
-        
-        // Neon ko'k gradiyent
-        ctx.fillStyle = `rgba(0, 210, 255, ${barHeight / 400})`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
-        
-        // Yuqori qismdagi chiziqlar
-        ctx.fillRect(x, 0, barWidth - 2, barHeight / 4);
-
+        const barHeight = dataArray[i] * 1.8;
+        ctx.fillStyle = `rgba(0, 210, 255, ${barHeight / 450})`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+        ctx.fillRect(x, 0, barWidth - 1, barHeight / 3);
         x += barWidth;
     }
 }
@@ -68,21 +52,25 @@ function playSound(e) {
     const audio = document.querySelector(`audio[data-key="${code}"]`);
     const key = document.querySelector(`.key[data-key="${code}"]`);
 
-    if (!audio) return;
+    if (!audio || !key) return;
 
+    // Klassni tozalash va qayta qo'shish (qotib qolmaslik uchun)
+    key.classList.remove('playing');
+    void key.offsetWidth; // Reflow
     key.classList.add('playing');
+
     audio.currentTime = 0;
     audio.play();
+
+    // 100ms dan keyin majburiy olib tashlash
+    setTimeout(() => {
+        key.classList.remove('playing');
+    }, 100);
 }
 
-function removeTransition(e) {
-    if (e.propertyName !== 'transform') return;
-    this.classList.remove('playing');
-}
-
+// Eventlarni ulash
 const keys = document.querySelectorAll('.key');
 keys.forEach(key => {
-    key.addEventListener('transitionend', removeTransition);
     key.addEventListener('click', playSound);
 });
 
