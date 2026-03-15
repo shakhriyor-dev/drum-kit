@@ -20,58 +20,65 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
 }
 
 .keys {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
     z-index: 10;
     justify-content: center;
-    max-width: 900px;
+    max-width: 800px;
 }
 
 .key {
-    width: 100px;
-    height: 100px;
-    background: rgba(30, 41, 59, 0.5);
-    border: 2px solid rgba(56, 189, 248, 0.2);
-    border-radius: 12px;
+    width: 110px;
+    height: 110px;
+    background: rgba(30, 41, 59, 0.4);
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: all 0.07s ease;
+    backdrop-filter: blur(12px);
+    transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     user-select: none;
+    position: relative;
 }
 
-.key:hover {
+/* Hover effekti - faqat klass yo'q bo'lganda ishlaydi */
+.key:hover:not(.playing) {
     border-color: #38bdf8;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    background: rgba(30, 41, 59, 0.6);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    transform: translateY(-5px);
 }
 
+/* Bosilganda qotib qolmasligi uchun !important va setTimeout bilan JS-da boshqariladi */
 .key.playing {
-    transform: scale(0.9);
-    border-color: #00d2ff;
-    background: #00d2ff;
-    box-shadow: 0 0 30px #00d2ff;
+    transform: scale(0.92) !important;
+    border-color: #00d2ff !important;
+    background: #00d2ff !important;
+    box-shadow: 0 0 40px #00d2ff, 0 0 80px rgba(0, 210, 255, 0.5) !important;
 }
 
 kbd {
-    font-size: 3rem;
+    font-size: 3.2rem;
     color: white;
-    font-weight: bold;
+    font-weight: 700;
+    pointer-events: none;
 }
 
 .sound {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: #38bdf8;
     text-transform: uppercase;
     margin-top: 5px;
+    pointer-events: none;
 }
 
 .playing kbd, .playing .sound {
